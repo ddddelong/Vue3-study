@@ -1,0 +1,128 @@
+@keyframes aaaa {
+  from {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(1500px);
+  }
+}
+
+.move {
+  animation: aaaa 1s 0.2s forwards;
+}
+
+.home-page {
+  //display: none;
+  @btn-width: 300px;
+  @btn-height: 100px;
+  //display: grid;
+  //place-items: center;
+  background-color: pink;
+  position: fixed;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  color: #fff;
+  //left: 100%;
+  //transform: translate(10px);
+
+  .btn-home {
+    position: absolute;
+    left: calc(50% - @btn-width / 2);
+    top: calc(50% - @btn-height / 2);
+
+    @btn-color: #ff0;
+    button {
+      position: relative;
+      width: @btn-width;
+      height: @btn-height;
+      border-radius: @btn-height * 0.5;
+      font-size: 30px;
+      //background-color: #66ddf7;
+      background-color: rgba(45, 45, 45, 1);
+      border: navajowhite;
+      font-family: '创中黑', serif;
+
+      // 动画
+      overflow: hidden;
+      color: #999;
+      &:hover {
+        color: @btn-color;
+        text-shadow: 0 0 15px @btn-color,
+                      0 0 40px @btn-color;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        top: var(--y);
+        left: var(--x);
+        //top: 10px;
+        //left: 0;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 100px;
+        background: radial-gradient(@btn-color, transparent, transparent);
+        opacity: 0;
+        transition: .5s, left 0s, top 0s;
+
+      }
+
+      &:hover::before {
+        opacity: 1;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        background-color: rgba(45, 45, 45, .8);
+        inset: 2px;
+        border-radius: 50px;
+      }
+
+      span {
+        position: relative;
+        z-index: 1;
+        letter-spacing: .2em;
+      }
+    }
+  }
+
+  .home-page__header {
+    font-family: 'Microsoft Himalaya', sans-serif;
+    margin: 10px auto;
+    color: #000;
+    font-size: 22px;
+    width: 500px;
+    //border: 2px solid rgba(78, 129, 89, 0.43);
+    //border-radius: 40px;
+    padding: 10px;
+
+    .time-container {
+      width: 500px;
+      margin: 10px auto;
+
+      .xxx {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .time {
+        color: #fff;
+        text-align: center;
+        margin: 10px 0 10px 0;
+        font-size: 50px;
+        line-height: 60px;
+        font-family: '创中黑', sans-serif;
+        text-shadow: 2px 2px 2px #000;
+
+        .h, .m, .s {
+          display: inline-block;
+          width: 60px;
+          height: 65px;
+        }
+      }
+    }
+  }
+}

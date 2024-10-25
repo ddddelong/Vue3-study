@@ -1,0 +1,180 @@
+/* 定义一些通用变量，便于样式复用 */
+* {
+  margin: 0;
+  padding: 0;
+}
+.bg {
+  position: relative;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.bg p {
+  color: #66ddf7;
+}
+.wish {
+  width: 442px;
+  height: 539px;
+  margin: 20px auto;
+  border-radius: 30px;
+  text-align: center;
+  perspective: 1000px;
+  animation: cardAnimation 4s 0.5s linear forwards infinite;
+}
+@keyframes cardAnimation {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(5px, 1px);
+  }
+  50% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-4px, 0);
+  }
+}
+@keyframes rotation {
+  to {
+    transform: rotate(1turn);
+  }
+}
+.content {
+  z-index: 4;
+}
+.main {
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0.3);
+  height: 539px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  color: #fff;
+}
+.main::before {
+  content: '';
+  width: 200%;
+  height: 200%;
+  background-color: #22292f;
+  position: absolute;
+  left: -50%;
+  top: -50%;
+  background-image: conic-gradient(transparent, #66ddf7, transparent 30%);
+  animation: rotation 4s linear infinite;
+}
+.main::after {
+  content: '';
+  position: absolute;
+  inset: 1vmin;
+  background-color: #000000;
+  border-radius: 4vmin;
+  z-index: 3;
+}
+.title {
+  text-align: center;
+  font-size: 35px;
+}
+.title p:nth-child(1) {
+  padding-top: 30px;
+}
+.age {
+  color: #efc43c;
+}
+.img {
+  font-size: 20px;
+  margin: 0 auto 20px;
+  color: rgba(169, 169, 169, 0.6);
+}
+.advertisement {
+  font-size: 20px;
+  line-height: 20px;
+  margin-bottom: 20px;
+  color: rgba(169, 169, 169, 0.6);
+}
+.advertisement .money {
+  color: #ca820a;
+}
+.advertisement .count {
+  color: #d94240;
+}
+#run {
+  z-index: 998;
+  position: relative;
+  --c: #0f0;
+  cursor: pointer;
+  width: 260px;
+  height: 60px;
+  border-radius: 30px;
+  border: 1px solid var(--c);
+  color: #999;
+  font-size: 1.5em;
+  background-color: #fff;
+  transition: 0.5s;
+}
+#run:hover {
+  z-index: 998;
+  color: var(--c);
+  text-shadow: 0 0 15px var(--c), 0 0 40px var(--c);
+}
+#run::before {
+  z-index: 999;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, 50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(var(--c), transparent, transparent);
+}
+.adv-close {
+  cursor: pointer;
+  width: 42px;
+  height: 40px;
+  font-size: 18px;
+  line-height: 40px;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  margin: 30px auto;
+}
+.lg {
+  position: relative;
+}
+.lg .test {
+  transform: translate(30px, 30px);
+}
+.big {
+  font-size: 20px;
+}
+.refresh {
+  cursor: pointer;
+}
+@font-face {
+  font-family: 'ManYu';
+  src: url('../../fonts/Aa漫语手写体.ttf');
+}
+@font-face {
+  font-family: '创中黑';
+  src: url('../../fonts/字魂58号-创中黑.ttf');
+}
+.type-wish {
+  display: none;
+  position: absolute;
+  z-index: 999;
+  width: 400px;
+  left: 50px;
+  top: 50px;
+}
+.type-wish p {
+  color: yellow;
+  font-size: 15px;
+  line-height: 30px;
+  font-family: '创中黑', serif;
+}
+.container {
+  position: relative;
+}
+/*# sourceMappingURL=black-bg.css.map */

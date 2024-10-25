@@ -1,0 +1,250 @@
+/* 定义一些通用变量，便于样式复用 */
+@border-radius: 30px;
+@color-bg: #ab9090;
+@color-white: #fff;
+@color-black: #000;
+@color-gray-light: rgba(169, 169, 169, 0.6);
+@color-highlight: #efc43c;
+@animation-duration: 2s;
+@borderWidth: 3px;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.bg {
+  //display: none;
+  position: relative;
+  //background-color: @color-bg;
+  background-color: @color-black;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  p {
+    color: #66ddf7;
+  }
+}
+
+.wish {
+  width: 442px;
+  height: 539px;
+  margin: 20px auto;
+  border-radius: @border-radius;
+  text-align: center;
+
+  //加点动画
+  //加透视
+  perspective: 1000px;
+  animation: cardAnimation 4s 0.5s  linear forwards infinite;
+}
+
+@keyframes cardAnimation {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(5px, 1px);
+  }
+  50% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-4px, 0);
+  }
+}
+@keyframes rotation {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.content {
+  z-index: 4;
+}
+
+.main {
+  border-radius: @border-radius;
+  background-color: rgba(0, 0, 0, .3);
+  height: 539px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  color: #fff;
+
+  //&::before {
+  //  content: "";
+  //  position: absolute;
+  //  width: 200%;
+  //  height: 200%;
+  //  background-color: #f40;
+  //  z-index: 2;
+  //  left: 50%;
+  //  top: 50%;
+  //  transform-origin: left top;
+  //  animation: rotation @animation-duration linear infinite;
+  //}
+  //
+  //&::after {
+  //  content: "";
+  //  position: absolute;
+  //  width: calc(100% - 2 * @borderWidth);
+  //  height: calc(100% - 2 * @borderWidth);
+  //  left: @borderWidth;
+  //  top: @borderWidth;
+  //  background: #000;
+  //  z-index: 3;
+  //  border-radius: inherit;
+  //  //inset: 1vmin;
+  //  //border: 3px solid rgba(84, 87, 94, 0.2);
+  //}
+  &::before {
+    content: '';
+    width: 200%;
+    height: 200%;
+    background-color: #22292f;
+    position: absolute;
+    left: -50%;
+    top: -50%;
+    background-image: conic-gradient(
+            transparent, #66ddf7, transparent 30%
+    );
+    animation: rotation 4s linear infinite;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 1vmin;
+    background-color: #000000;
+    border-radius: 4vmin;
+    z-index: 3;
+  }
+}
+
+
+.title {
+  text-align: center;
+  font-size: 35px;
+
+  p:nth-child(1) {
+    padding-top: 30px;
+  }
+}
+
+.age {
+  color: @color-highlight;
+}
+
+.img {
+  font-size: 20px;
+  margin: 0 auto 20px;
+  color: @color-gray-light;
+}
+
+.advertisement {
+  font-size: 20px;
+  line-height: 20px;
+  margin-bottom: 20px;
+  color: @color-gray-light;
+
+  .money {
+    color: #ca820a;
+  }
+
+  .count {
+    color: #d94240;
+  }
+}
+
+#run {
+  z-index: 998;
+  position: relative;
+  --c: #0f0;
+  cursor: pointer;
+  width: 260px;
+  height: 60px;
+  border-radius: @border-radius;
+  border: 1px solid var(--c);
+  color: #999;
+  font-size: 1.5em;
+  background-color: @color-white;
+  transition: 0.5s;
+
+  &:hover {
+    z-index: 998;
+    color: var(--c);
+    text-shadow: 0 0 15px var(--c), 0 0 40px var(--c);
+  }
+
+  &::before {
+    z-index: 999;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, 50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(var(--c), transparent, transparent);
+  }
+}
+
+.adv-close {
+  cursor: pointer;
+  width: 42px;
+  height: 40px;
+  font-size: 18px;
+  line-height: 40px;
+  color: @color-white;
+  border: 1px solid @color-white;
+  border-radius: 50%;
+  margin: 30px auto;
+}
+
+.lg {
+  position: relative;
+
+  .test {
+    transform: translate(30px, 30px);
+  }
+}
+
+.big {
+  font-size: 20px;
+}
+
+.refresh {
+  cursor: pointer;
+}
+
+@font-face {
+  font-family: 'ManYu';
+  src: url('../../fonts/Aa漫语手写体.ttf');
+}
+
+@font-face {
+  font-family: '创中黑';
+  src: url('../../fonts/字魂58号-创中黑.ttf');
+}
+.type-wish {
+  display: none;
+  //background-color: #fff;
+  position: absolute;
+  z-index: 999;
+  width: 400px;
+  left: 50px;
+  top: 50px;
+
+  p {
+    color: yellow;
+    font-size: 15px;
+    line-height: 30px;
+    font-family: '创中黑', serif;
+  }
+}
+
+.container {
+  position: relative;
+}

@@ -1,0 +1,101 @@
+@keyframes aaaa {
+  from {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(1500px);
+  }
+}
+.move {
+  animation: aaaa 1s 0.2s forwards;
+}
+.home-page {
+  background-color: pink;
+  position: fixed;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  color: #fff;
+}
+.home-page .btn-home {
+  position: absolute;
+  left: calc(50% - 300px / 2);
+  top: calc(50% - 100px / 2);
+}
+.home-page .btn-home button {
+  position: relative;
+  width: 300px;
+  height: 100px;
+  border-radius: 50px;
+  font-size: 30px;
+  background-color: #2d2d2d;
+  border: navajowhite;
+  font-family: '创中黑', serif;
+  overflow: hidden;
+  color: #999;
+}
+.home-page .btn-home button:hover {
+  color: #ff0;
+  text-shadow: 0 0 15px #ff0, 0 0 40px #ff0;
+}
+.home-page .btn-home button::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: var(--y);
+  left: var(--x);
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 100px;
+  background: radial-gradient(#ff0, transparent, transparent);
+  opacity: 0;
+  transition: 0.5s, left 0s, top 0s;
+}
+.home-page .btn-home button:hover::before {
+  opacity: 1;
+}
+.home-page .btn-home button::after {
+  content: "";
+  position: absolute;
+  background-color: rgba(45, 45, 45, 0.8);
+  inset: 2px;
+  border-radius: 50px;
+}
+.home-page .btn-home button span {
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.2em;
+}
+.home-page .home-page__header {
+  font-family: 'Microsoft Himalaya', sans-serif;
+  margin: 10px auto;
+  color: #000;
+  font-size: 22px;
+  width: 500px;
+  padding: 10px;
+}
+.home-page .home-page__header .time-container {
+  width: 500px;
+  margin: 10px auto;
+}
+.home-page .home-page__header .time-container .xxx {
+  margin-top: 20px;
+  text-align: center;
+}
+.home-page .home-page__header .time-container .time {
+  color: #fff;
+  text-align: center;
+  margin: 10px 0 10px 0;
+  font-size: 50px;
+  line-height: 60px;
+  font-family: '创中黑', sans-serif;
+  text-shadow: 2px 2px 2px #000;
+}
+.home-page .home-page__header .time-container .time .h,
+.home-page .home-page__header .time-container .time .m,
+.home-page .home-page__header .time-container .time .s {
+  display: inline-block;
+  width: 60px;
+  height: 65px;
+}
+/*# sourceMappingURL=home-page.css.map */
