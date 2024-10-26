@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, onBeforeUnmount, ref } from 'vue'
-import getLunar from '@/utils/chinese-lunar.js';
+import LunarCalendar from "lunar-calendar";
 
 const timeData = reactive({
   h: '0',
@@ -9,6 +9,15 @@ const timeData = reactive({
   lunar: "农历九月十九",
   date: "2024年10月24日"
 })
+/**
+ * 计算给定日期的农历表示形式
+ * @param {Date} date - 公历日期
+ * @returns {string} 农历日期，如九月廿二
+ */
+function getLunar(date: Date):string {
+  const lunar = LunarCalendar.solarToLunar(date.getFullYear(), date.getMonth() + 1, date.getDate());
+  return `${lunar.lunarMonthName}${lunar.lunarDayName}`
+}
 
 let animationFrameId: number = 0;
 function updateTime() {
@@ -40,7 +49,7 @@ function updateTime() {
       lastHour = currentHour;
 
       // 每次小时变化时更新农历和日期
-      timeData.lunar = '农历' + getLunar(now);
+      timeData.lunar = ' 农历' + getLunar(now);
       timeData.date = now.toLocaleDateString('zh-CN', {
         year: 'numeric',
         month: 'long',
@@ -56,6 +65,8 @@ function updateTime() {
 
 const audioPlay = ref<HTMLAudioElement | null>()
 const homeButton = ref<HTMLButtonElement | null>(null);
+const audioSrc = new URL('../assets/audio/hu.mp3', import.meta.url).href
+
 const click = () => {
   // const btn = document.querySelector('.btn-home button')
   // 退出动画
@@ -112,7 +123,7 @@ onBeforeUnmount(() => {
     </div>
     <div class="btn-home">
       <button @click="click" ref="homeButton"><span>祝我生日快乐</span></button>
-      <audio src="src/assets/audio/hu.mp3" id="hu" ref="audioPlay"></audio>
+      <audio :src="audioSrc" id="hu" ref="audioPlay"></audio>
     </div>
     <div class="home-page__foot">
       <img src="../assets/images/头像.jpg" alt="">
