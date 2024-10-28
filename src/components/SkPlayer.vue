@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import '@/utils/skPlayer/skPlayer.scss'
-import {onMounted, ref, nextTick} from 'vue'
+import {ref, nextTick} from 'vue'
 import type {Ref, ReactiveArray, MusicInfo} from '@/types'
 
 type Options = {
