@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import '@/utils/skPlayer/skPlayer.scss'
-import { onMounted, ref, nextTick } from 'vue'
-import type { Ref, ReactiveArray, MusicInfo } from '@/types'
-
+import {onMounted, ref, nextTick} from 'vue'
+import type {Ref, ReactiveArray, MusicInfo} from '@/types'
 
 type Options = {
   audio: Ref<HTMLAudioElement>,
@@ -26,7 +25,7 @@ class AudioPlayer {
   constructor(options: Options) {
     this.audio = options.audio;
     this.cover = options.cover;
-    this.playButton =options.playButton;
+    this.playButton = options.playButton;
     this.currentProgress = ref(0);
     this.totalTime = ref('0:00');
     this.currenTime = ref('0:00');
@@ -125,6 +124,7 @@ class AudioPlayer {
   }
 }
 
+// region 初始化音乐播放器，即给这个类实例化一个对象
 // 接收来自父组件的音乐列表
 const props = defineProps<{
   musicList: ReactiveArray<MusicInfo>
@@ -140,16 +140,18 @@ const audioPlayer = new AudioPlayer({
   playButton,
   musicInfo,
 });
-onMounted(() => {
-});
+// endregion
+
 </script>
 
 <template>
   <div class="SkPlayer" :class="{'skPlayer-list-on': audioPlayer.isShowListValue}">
-    <audio ref="audio" class="skPlayer-source" :src="audioPlayer.musicInfo[audioPlayer.curIndex.value].url" @loadedmetadata="audioPlayer.setProgress"></audio>
+    <audio ref="audio" class="skPlayer-source" :src="audioPlayer.musicInfo[audioPlayer.curIndex.value].url"
+           @loadedmetadata="audioPlayer.setProgress"></audio>
     <div class="skPlayer-picture">
       <img ref="cover" alt="" class="skPlayer-cover" :src="audioPlayer.musicInfo[audioPlayer.curIndex.value].coverUrl">
-      <a ref="playButton" :class="{'skPlayer-play-btn': true, 'skPlayer-pause': audioPlayer.isPlay}" href="javascript:" @click="audioPlayer.pause">
+      <a ref="playButton" :class="{'skPlayer-play-btn': true, 'skPlayer-pause': audioPlayer.isPlay}" href="javascript:"
+         @click="audioPlayer.pause">
         <span class="skPlayer-left"></span>
         <span class="skPlayer-right"></span>
       </a>
@@ -162,7 +164,8 @@ onMounted(() => {
         <div class="skPlayer-line" :style="{width: audioPlayer.currentProgressValue + '%'}"></div>
       </div>
       <p class="skPlayer-time">
-        <span class="skPlayer-cur">{{ audioPlayer.currenTime }}</span>/<span class="skPlayer-total">{{ audioPlayer.totalTime }}</span>
+        <span class="skPlayer-cur">{{ audioPlayer.currenTime }}</span>/<span
+          class="skPlayer-total">{{ audioPlayer.totalTime }}</span>
       </p>
       <div class="skPlayer-volume">
         <i class="skPlayer-icon"></i>
@@ -176,7 +179,8 @@ onMounted(() => {
       <i class="skPlayer-mode"></i>
     </div>
     <ul class="skPlayer-list">
-      <li v-for="(item, index) in audioPlayer.musicInfo" :class="{'skPlayer-curMusic': item.cruMusic}" :key="index" @click="audioPlayer.switchMusic(index)">
+      <li v-for="(item, index) in audioPlayer.musicInfo" :class="{'skPlayer-curMusic': item.cruMusic}" :key="index"
+          @click="audioPlayer.switchMusic(index)">
         <i class="skPlayer-list-sign"></i>
         <span class="skPlayer-list-index">{{ index + 1 }}</span>
         <span class="skPlayer-list-name">{{ item.title }}</span>
