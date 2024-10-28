@@ -14,7 +14,7 @@ let musicList: ReactiveArray<MusicInfo> = reactive([
   }
 ])  // 初始化为一个空的响应式数组
 
-
+// region 获取音乐列表
 fetch('http://127.0.0.1:5000/api/music/info', {
   method: 'GET',
 }).then(response => {
@@ -29,7 +29,7 @@ fetch('http://127.0.0.1:5000/api/music/info', {
 }).catch(error => {
   console.error('There has been a problem with your fetch operation:', error);
 });
-
+// endregion
 
 </script>
 
