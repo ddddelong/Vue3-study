@@ -1,44 +1,44 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import HomePage from "@/components/Home-Page.vue";
 import SkPlayer from "@/components/SkPlayer.vue";
-import type {ReactiveArray, MusicInfo} from "@/types"
+import type {MusicInfo, ReactiveArray} from "@/types"
 import {reactive} from "vue";
 
-const musicList:ReactiveArray<MusicInfo> = reactive([
+let musicList: ReactiveArray<MusicInfo> = reactive([
   {
-    title: 'best-wish',
+    url: 'http://127.0.0.1:5000/audio/yuanshen-wish.MP3',
     author: 'b站-十壹-Eleven',
-    url: new URL('./assets/audio/yuanshen-wish.mp3', import.meta.url).href,
-    coverUrl: new URL('./assets/images/cake-1.png', import.meta.url).href,
-    cruMusic: true
-  },
-  {
-    title: '祝你生日快乐呀',
-    author: 'b站-许里xurry',
-    url: new URL('./assets/audio/xl_xurry-Happy-Birthday.mp4', import.meta.url).href,
-    coverUrl: new URL('./assets/images/cover-许里xurry-如果你也在今天生日_那也祝你生日快乐呀_原神生日祝福.jpg', import.meta.url).href,
-    cruMusic: false
+    coverUrl: 'http://127.0.0.1:5000/images/cake-1.png',
+    cruMusic: true,
+    title: 'best-wish'
   }
-]);
-const musicList1:ReactiveArray<MusicInfo> = reactive([
-  {
-    title: 'best-wish',
-    author: 'b站-十壹-Eleven',
-    url: new URL('./assets/audio/yuanshen-wish.mp3', import.meta.url).href,
-    coverUrl: new URL('./assets/images/cake-1.png', import.meta.url).href,
-    cruMusic: true
+])  // 初始化为一个空的响应式数组
+
+
+fetch('http://127.0.0.1:5000/api/music/info', {
+  method: 'GET',
+}).then(response => {
+  // 确保响应成功
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
   }
-]);
+  return response.json();
+}).then(data => {
+  console.log(data.data);
+  musicList.splice(0, musicList.length, ...data.data);
+}).catch(error => {
+  console.error('There has been a problem with your fetch operation:', error);
+});
+
+
 </script>
 
 <template>
-  <HomePage />
+  <HomePage/>
   <div style="position:fixed;bottom:10%;right: 3%;z-index: 999">
     <SkPlayer :musicList="musicList"/>
   </div>
-  <div style="position:fixed;bottom:30%;right: 3%;z-index: 999; background-color: #efc43c;">
-    <SkPlayer :musicList="musicList1"/>
-  </div>
+
 </template>
 
 <style scoped>
