@@ -12,4 +12,10 @@ type MusicInfo = {
 	cruMusic: boolean;
 }
 
-export type { Ref, ReactiveArray, MusicInfo };
+type MessageObject = {
+	id: string,
+	message: string,
+	color: string,
+}
+
+export type {Ref, ReactiveArray, MusicInfo, MessageObject};
