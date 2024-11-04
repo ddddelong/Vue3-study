@@ -1,16 +1,22 @@
 <script lang="ts" setup>
-import {provide, ref, watch, inject, type Ref} from 'vue';
+import {ref, watch, defineEmits} from 'vue';
 // 接收来自父组件的数据
 const props = defineProps<{
   message: string,
   ok: boolean
 }>();
 
+// 向父组件发数据
+interface Emits {
+  (event: 'close', ok: boolean): void
+}
+
+const emits = defineEmits<Emits>()
+
 // const isStart = computed(() => props.ok)
 // const isStart = ref(false)
 const y = ref(0)    // 偏移量
 const duration = 10000   // 动画持续时间
-const setupButton: Ref<HTMLElement> = inject('setupButton') as Ref<HTMLElement> // 父组件提供的按钮
 
 let textAnimationId: number | null = null   // 记录动画的id
 function textAnimation() {
@@ -25,6 +31,7 @@ function stopAnimation() {
   }
 }
 
+// region   监听ok的变化
 watch(
     () => props.ok,
     (value) => {
@@ -36,8 +43,8 @@ watch(
             stopAnimation();
             setTimeout(() => {
               y.value = 0; // 恢复原样
-              setupButton.value.style.opacity = '100';
-              props.ok = false
+              // 向父组件发送关闭事件
+              emits('close', props.ok);
             }, 2000);
           }, duration);
         }
@@ -46,7 +53,7 @@ watch(
       }
     }
 );
-
+// endregion
 </script>
 
 <template>

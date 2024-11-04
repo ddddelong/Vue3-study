@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MessageBox from "@/components/Message/MessageBox.vue";
-import {ref, provide, watch, inject, type Ref} from "vue";
+import {ref} from "vue";
 import type {MessageObject} from "@/types";
 
 defineProps<{
@@ -21,10 +21,6 @@ function stop() {
   ok.value = false
   buttonOpacity.value = 100
 }
-
-// 直接将按钮提供给子组件
-const setupButton = ref()
-provide('setupButton', setupButton)
 </script>
 
 <template>
@@ -32,7 +28,6 @@ provide('setupButton', setupButton)
     <button
         @click="start"
         :style="{opacity: buttonOpacity}"
-        ref="setupButton"
     >
       开始动画
     </button>
@@ -42,6 +37,7 @@ provide('setupButton', setupButton)
         :key="item.id"
         :ok="ok"
         :style="{color: item.color}"
+        @close="stop"
     />
   </div>
 </template>
