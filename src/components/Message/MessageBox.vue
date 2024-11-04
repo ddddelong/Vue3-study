@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import {ref, watch, defineEmits} from 'vue';
+import {ref, watch, defineEmits, inject} from 'vue';
+import type {textAnimationOptionsType} from '@/types';
 // 接收来自父组件的数据
 const props = defineProps<{
   message: string,
   ok: boolean
 }>();
+// 接收动画选项
+const textAnimationOptions: textAnimationOptionsType = inject('textAnimationOptions') as textAnimationOptionsType
 
 // 向父组件发数据
 interface Emits {
@@ -16,11 +19,11 @@ const emits = defineEmits<Emits>()
 // const isStart = computed(() => props.ok)
 // const isStart = ref(false)
 const y = ref(0)    // 偏移量
-const duration = 10000   // 动画持续时间
+const duration = textAnimationOptions.duration * 1000  // 动画持续时间
 
 let textAnimationId: number | null = null   // 记录动画的id
 function textAnimation() {
-  y.value -= 1
+  y.value -= textAnimationOptions.speed   // 移动距离
   textAnimationId = requestAnimationFrame(textAnimation)
 }
 

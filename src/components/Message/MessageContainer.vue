@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import MessageBox from "@/components/Message/MessageBox.vue";
-import {ref} from "vue";
-import type {MessageObject} from "@/types";
+import {ref, inject} from "vue";
+import type {MessageObject, textAnimationOptionsType} from "@/types";
+import {nanoid} from "nanoid";
 
-defineProps<{
-  messageList: Array<MessageObject>
-}>()
+// 接收动画选项
+const textAnimationOptions = inject('textAnimationOptions') as textAnimationOptionsType
 
 const ok = ref(false)
 const buttonOpacity = ref(100)
@@ -21,6 +21,27 @@ function stop() {
   ok.value = false
   buttonOpacity.value = 100
 }
+
+const messageList: Array<MessageObject> = []
+
+function randInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+// 生成随机消息——渲染函数
+function generateMessage() {
+  const {msgArray, msgCount, textColorList} = textAnimationOptions
+  for (let i = 0; i < msgCount; i++) {
+    const a = msgArray
+    messageList.push({
+      id: nanoid(),
+      message: a[randInt(0, a.length)],
+      color: textColorList[randInt(0, textColorList.length)],
+    })
+  }
+}
+
+generateMessage()
 </script>
 
 <template>

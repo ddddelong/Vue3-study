@@ -18,4 +18,12 @@ type MessageObject = {
 	color: string,
 }
 
-export type {Ref, ReactiveArray, MusicInfo, MessageObject};
+type textAnimationOptionsType = {
+	duration: number,   // 动画持续时间，单位s
+	speed: number,    // 动画速度
+	msgArray: Array<string>,     // 消息数组
+	msgCount: number,    // 消息数量
+	textColorList: Array<string>,   // 文字颜色数组
+}
+
+export type {Ref, ReactiveArray, MusicInfo, MessageObject, textAnimationOptionsType};
