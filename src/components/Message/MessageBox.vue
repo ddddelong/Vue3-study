@@ -1,38 +1,47 @@
 <script lang="ts" setup>
 import {ref, watch, defineEmits, inject} from 'vue';
 import type {TextAnimationOptions} from '@/types';
-// 接收来自父组件的数据
+// region 接收来自父组件的数据
 const props = defineProps<{
   message: string,
   ok: boolean
 }>();
 // 接收动画选项
 const textAnimationOptions: TextAnimationOptions = inject('textAnimationOptions') as TextAnimationOptions
+// endregion
 
-// 向父组件发数据
+// region 向父组件发数据
 interface Emits {
   (event: 'close', ok: boolean): void
 }
 
 const emits = defineEmits<Emits>()
+// endregion
 
-// const isStart = computed(() => props.ok)
-// const isStart = ref(false)
-const y = ref(0)    // 偏移量
-const duration = textAnimationOptions.duration * 1000  // 动画持续时间
+// region 动画参数初始化以及动画开始与停止函数
+// 偏移量
+const y = ref(0);
+// 动画持续时间
+const duration = textAnimationOptions.duration * 1000;
 
-let textAnimationId: number | null = null   // 记录动画的id
+// 记录动画的id
+let textAnimationId: number | null = null;
+
+// 开始动画
 function textAnimation() {
   y.value -= textAnimationOptions.speed   // 移动距离
   textAnimationId = requestAnimationFrame(textAnimation)
 }
 
+// 停止动画
 function stopAnimation() {
   if (textAnimationId !== null) {
     cancelAnimationFrame(textAnimationId);
     textAnimationId = null;
   }
 }
+
+// endregion
 
 // region   监听ok的变化
 watch(

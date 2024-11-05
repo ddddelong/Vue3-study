@@ -7,7 +7,7 @@ import {provide, reactive} from "vue";
 import type {Reactive} from "vue";
 import '@/assets/fonts/font.css'
 
-
+// region 获取音乐列表
 let musicList: Reactive<[MusicInfoObject]> = reactive([
   {
     url: 'http://127.0.0.1:5000/audio/yuanshen-wish.MP3',
@@ -18,7 +18,6 @@ let musicList: Reactive<[MusicInfoObject]> = reactive([
   }
 ])  // 初始化为一个空的响应式数组
 
-// region 获取音乐列表
 fetch('http://127.0.0.1:5000/api/music/info', {
   method: 'GET',
 }).then(response => {
@@ -56,6 +55,7 @@ const textAnimationOptions: TextAnimationOptions = {
 
 provide('textAnimationOptions', textAnimationOptions)   // 向子组件提供动画选项
 // endregion
+
 </script>
 
 <template>

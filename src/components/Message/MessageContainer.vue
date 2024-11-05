@@ -4,12 +4,16 @@ import {ref, inject} from "vue";
 import type {MessageObject, TextAnimationOptions} from "@/types";
 import {nanoid} from "nanoid";
 
-// 接收动画选项
+// region 接收动画选项，定义动画状态
 const textAnimationOptions = inject('textAnimationOptions') as TextAnimationOptions
 
+const messageList: MessageObject[] = []    // 初始化消息列表
 const ok = ref(false)
 const buttonOpacity = ref(100)
 
+// endregion
+
+// region 动画开始与结束函数
 // 开始动画
 function start() {
   ok.value = true
@@ -22,14 +26,14 @@ function stop() {
   buttonOpacity.value = 100
 }
 
-const messageList: Array<MessageObject> = []
+// endregion
 
-function randInt(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min) + min);
-}
-
-// 生成随机消息——渲染函数
+// region 根据动画选项textAnimationOptions生成渲染数据的数组，包含消息内容，id，消息文本的随机颜色
 function generateMessage() {
+  function randInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+
   const {msgArray, msgCount, textColorList} = textAnimationOptions
   for (let i = 0; i < msgCount; i++) {
     const a = msgArray
@@ -42,6 +46,7 @@ function generateMessage() {
 }
 
 generateMessage()
+// endregion
 </script>
 
 <template>
