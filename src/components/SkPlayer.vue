@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import '@/utils/skPlayer/skPlayer.scss'
-import {ref, nextTick} from 'vue'
-import type {Ref, ReactiveArray, MusicInfo} from '@/types'
+import {ref, nextTick} from 'vue';
+import type {Ref, Reactive} from 'vue';
+import type {MusicInfoObject} from '@/types'
 
 type Options = {
   audio: Ref<HTMLAudioElement>,
   cover: Ref<HTMLImageElement>,
   playButton: Ref<HTMLAnchorElement>,
-  musicInfo: ReactiveArray<MusicInfo>,
+  musicInfo: Reactive<[MusicInfoObject]>,
 }
 
 class AudioPlayer {
@@ -19,7 +20,7 @@ class AudioPlayer {
   currenTime: Ref<string>;
   volume: Ref<number>;
   isShowList: Ref<boolean>;
-  musicInfo: ReactiveArray<MusicInfo>;
+  musicInfo: Reactive<[MusicInfoObject]>;
   curIndex: Ref<number>;
 
   constructor(options: Options) {
@@ -111,7 +112,7 @@ class AudioPlayer {
         this.audio.value.play().catch((error: string) => {
           console.error('播放音乐时出错:', error);
         });
-        this.musicInfo.forEach((item: MusicInfo, idx: number) => {
+        this.musicInfo.forEach((item: MusicInfoObject, idx: number) => {
           item.cruMusic = idx === this.curIndex.value;
         });
       }
@@ -127,10 +128,10 @@ class AudioPlayer {
 // region 初始化音乐播放器，即给这个类实例化一个对象
 // 接收来自父组件的音乐列表
 const props = defineProps<{
-  musicList: ReactiveArray<MusicInfo>
+  musicList: Reactive<[MusicInfoObject]>
 }>()
 
-const musicInfo: ReactiveArray<MusicInfo> = props.musicList;
+const musicInfo: Reactive<[MusicInfoObject]> = props.musicList;
 const audio = ref();
 const cover = ref();
 const playButton = ref();

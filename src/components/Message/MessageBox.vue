@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import {ref, watch, defineEmits, inject} from 'vue';
-import type {textAnimationOptionsType} from '@/types';
+import type {TextAnimationOptions} from '@/types';
 // 接收来自父组件的数据
 const props = defineProps<{
   message: string,
   ok: boolean
 }>();
 // 接收动画选项
-const textAnimationOptions: textAnimationOptionsType = inject('textAnimationOptions') as textAnimationOptionsType
+const textAnimationOptions: TextAnimationOptions = inject('textAnimationOptions') as TextAnimationOptions
 
 // 向父组件发数据
 interface Emits {

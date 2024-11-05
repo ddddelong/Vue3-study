@@ -1,10 +1,4 @@
-type Ref<T> = { value: T };
-
-type ReactiveArray<T> = Array<T> & {
-	[key: number]: T;
-}
-
-type MusicInfo = {
+type MusicInfoObject = {
 	title: string;
 	author: string;
 	url: string;
@@ -18,7 +12,7 @@ type MessageObject = {
 	color: string,
 }
 
-type textAnimationOptionsType = {
+type TextAnimationOptions = {
 	duration: number,   // 动画持续时间，单位s
 	speed: number,    // 动画速度
 	msgArray: Array<string>,     // 消息数组
@@ -26,4 +20,4 @@ type textAnimationOptionsType = {
 	textColorList: Array<string>,   // 文字颜色数组
 }
 
-export type {Ref, ReactiveArray, MusicInfo, MessageObject, textAnimationOptionsType};
+export type {MusicInfoObject, MessageObject, TextAnimationOptions};

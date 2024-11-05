@@ -2,12 +2,13 @@
 import HomePage from "@/components/Home-Page.vue";
 import SkPlayer from "@/components/SkPlayer.vue";
 import MessageContainer from "@/components/Message/MessageContainer.vue";
-import type {MusicInfo, ReactiveArray, MessageObject, textAnimationOptionsType} from "@/types"
-import {provide, reactive, ref} from "vue";
+import type {MusicInfoObject, TextAnimationOptions} from "@/types"
+import {provide, reactive} from "vue";
+import type {Reactive} from "vue";
 import '@/assets/fonts/font.css'
 
 
-let musicList: ReactiveArray<MusicInfo> = reactive([
+let musicList: Reactive<[MusicInfoObject]> = reactive([
   {
     url: 'http://127.0.0.1:5000/audio/yuanshen-wish.MP3',
     author: 'b站-十壹-Eleven',
@@ -35,7 +36,7 @@ fetch('http://127.0.0.1:5000/api/music/info', {
 // endregion
 
 // region 定义动画选项
-const textAnimationOptions: textAnimationOptionsType = {
+const textAnimationOptions: TextAnimationOptions = {
   duration: 20,   // 动画持续时间，单位s
   speed: 4,    // 动画速度
   msgArray: ['666', '对对对', '哈哈哈', '6'],     // 消息数组
@@ -58,10 +59,10 @@ provide('textAnimationOptions', textAnimationOptions)   // 向子组件提供动
 </script>
 
 <template>
-  <!--  <HomePage/>-->
-  <!--  <div style="position:fixed;bottom:10%;right: 3%;z-index: 999">-->
-  <!--    <SkPlayer :musicList="musicList"/>-->
-  <!--  </div>-->
+  <HomePage/>
+  <div style="position:fixed;bottom:10%;right: 3%;z-index: 999">
+    <SkPlayer :musicList="musicList"/>
+  </div>
   <MessageContainer/>
 </template>
 

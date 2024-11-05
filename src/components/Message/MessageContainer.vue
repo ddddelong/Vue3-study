@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import MessageBox from "@/components/Message/MessageBox.vue";
 import {ref, inject} from "vue";
-import type {MessageObject, textAnimationOptionsType} from "@/types";
+import type {MessageObject, TextAnimationOptions} from "@/types";
 import {nanoid} from "nanoid";
 
 // 接收动画选项
-const textAnimationOptions = inject('textAnimationOptions') as textAnimationOptionsType
+const textAnimationOptions = inject('textAnimationOptions') as TextAnimationOptions
 
 const ok = ref(false)
 const buttonOpacity = ref(100)
