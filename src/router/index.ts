@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import APP from '@/App.vue';
-import HomePage from "@/components/Home-Page.vue";
+import HomePage from "@/components/HomePage.vue";
 import MessageContainer from "@/components/Message/MessageContainer.vue";
 import Danmu from "@/components/BulletComments/Danmu.vue";
 

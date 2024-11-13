@@ -1,39 +1,11 @@
 <script lang="ts" setup>
-import HomePage from "@/components/Home-Page.vue";
+import HomePage from "@/components/HomePage.vue";
 import SkPlayer from "@/components/SkPlayer.vue";
 import MessageContainer from "@/components/Message/MessageContainer.vue";
 import NavBar from "@/components/NavBar.vue";
-import type {MusicInfoObject, TextAnimationOptions} from "@/types"
+import type {TextAnimationOptions} from "@/types"
 import {provide, reactive} from "vue";
-import type {Reactive} from "vue";
 import '@/assets/fonts/font.css'
-
-// region 获取音乐列表
-let musicList: Reactive<[MusicInfoObject]> = reactive([
-  {
-    url: 'http://127.0.0.1:5000/audio/yuanshen-wish.MP3',
-    author: 'b站-十壹-Eleven',
-    coverUrl: 'http://127.0.0.1:5000/images/cake-1.png',
-    cruMusic: true,
-    title: 'best-wish'
-  }
-])  // 初始化为一个空的响应式数组
-
-fetch('http://127.0.0.1:5000/api/music/info', {
-  method: 'GET',
-}).then(response => {
-  // 确保响应成功
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-}).then(data => {
-  console.log(data.data);
-  musicList.splice(0, musicList.length, ...data.data);
-}).catch(error => {
-  console.error('There has been a problem with your fetch operation:', error);
-});
-// endregion
 
 // region 定义动画选项
 const textAnimationOptions: TextAnimationOptions = {
@@ -72,5 +44,8 @@ provide('textAnimationOptions', textAnimationOptions)   // 向子组件提供动
 <style scoped>
 
 </style>
-
-
+<style>
+.el-tabs__header {
+  margin: 0;
+}
+</style>
