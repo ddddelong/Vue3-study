@@ -2,6 +2,7 @@
 import HomePage from "@/components/Home-Page.vue";
 import SkPlayer from "@/components/SkPlayer.vue";
 import MessageContainer from "@/components/Message/MessageContainer.vue";
+import NavBar from "@/components/NavBar.vue";
 import type {MusicInfoObject, TextAnimationOptions} from "@/types"
 import {provide, reactive} from "vue";
 import type {Reactive} from "vue";
@@ -59,13 +60,17 @@ provide('textAnimationOptions', textAnimationOptions)   // 向子组件提供动
 </script>
 
 <template>
-  <HomePage/>
-  <div style="position:fixed;bottom:10%;right: 3%;z-index: 999">
-    <SkPlayer :musicList="musicList"/>
-  </div>
-  <MessageContainer/>
+  <!--  <HomePage/>-->
+  <!--  <div style="position:fixed;bottom:10%;right: 3%;z-index: 999">-->
+  <!--    <SkPlayer :musicList="musicList"/>-->
+  <!--  </div>-->
+  <!--  <MessageContainer/>-->
+  <NavBar/>
+
 </template>
 
 <style scoped>
 
 </style>
+
+
