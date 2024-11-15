@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import NavButton from "@/components/NavButton.vue";
+import Edit from "@/components/BulletComments/Edit.vue";
+import type {Danmu1} from "@/types/danmu";
 import {nextTick, reactive} from "vue";
 import {nanoid} from "nanoid";
 import {randInt} from '@/hooks/random'
@@ -24,6 +26,20 @@ class Track {
   disabled: boolean = false   // 轨道是否禁用
 }
 
+// 弹幕类型类
+class DanmuType {
+  type: string = 'roll'  // 'roll' | 'top' | 'bottom'
+
+  constructor(type = 'roll') {
+    this.type = type
+  }
+
+  // 根据弹幕类型，返回ture表示roll类型，否则为top或bottom类型
+  get isRoll() {
+    return this.type === 'roll'
+  }
+}
+
 // 弹幕类
 class Bullet {
   content: string;
@@ -32,6 +48,8 @@ class Bullet {
   key: string
   track: Track
   color: string   // 弹幕颜色
+  danmuType: DanmuType
+  isNew: boolean
 
   constructor(content: string = '哈哈哈', color = '#fff') {
     this.color = color
@@ -39,6 +57,8 @@ class Bullet {
     this.id = nanoid();
     this.key = nanoid()
     this.content = content
+    this.danmuType = new DanmuType();
+    this.isNew = false
   }
 
   get getTrackOffset() {
@@ -48,10 +68,23 @@ class Bullet {
   get getColor() {
     return this.color
   }
+
+  get getClassList() {
+    if (!this.isNew) {
+      if (this.danmuType.type === 'roll') {
+        return [`animate-${this.status}`, 'title']
+      } else {
+        return [`danmu-type-${this.danmuType.type}`, 'fade-out']
+      }
+    } else {
+      return [`animate-${this.status}`, 'title', 'new-bullet']
+    }
+  }
 }
 
 let bullets = reactive<Bullet[]>([])   // 弹幕数组
 const tracks = reactive<Track[]>([])   // 轨道数组
+const bulletTypes = reactive<DanmuType[]>([])
 const trackCount = 8   // 轨道数量
 // 初始化轨道
 for (let i = 0; i < trackCount; i++) {
@@ -60,32 +93,57 @@ for (let i = 0; i < trackCount; i++) {
   tracks.push(track)
 }
 
+// 初始化弹幕类型
+bulletTypes.push(new DanmuType('roll'))
+bulletTypes.push(new DanmuType('top'))
+bulletTypes.push(new DanmuType('bottom'))
+
 // 添加弹幕
 function add(n: number = randInt(trackCount)) {
   const color = colorLs[randInt(colorLs.length)]
   const content = bulletContents[randInt(bulletContents.length)]
   const bullet = new Bullet(content, color)
   bullet.track = tracks[n]   // 使用第n个轨道
+  bullet.danmuType = bulletTypes[randInt(bulletTypes.length)]   // 使用随机弹幕类型
   bullets.push(bullet)
 }
 
 function run() {
   bullets.forEach((bullet) => {
-    if (bullet.status === 'waiting') {
-      bullet.status = 'run'
+    if (bullet.danmuType.isRoll) {
+      // 如果弹幕是滚动类型
+      if (bullet.status === 'waiting') {
+        bullet.status = 'run';
 
-      bullet.track.disabled = true;   // 将当前轨道禁用
-      // 动态生成解除禁用轨道的时间
-      const w1 = document.querySelector('.container')?.getBoundingClientRect().width as number // 弹幕容器的宽度
-      const w2 = document.getElementById(bullet.id)?.getBoundingClientRect().width as number  // 弹幕的宽度
+        // 禁用轨道，防止其他弹幕同时发射到同一轨道
+        bullet.track.disabled = true;
 
-      const delay = (w2 / (w1 + w2)) * 5 * 1000   // 解除禁用轨道的时间
+        // 获取容器和弹幕宽度
+        const w1 = document.querySelector('.container')?.getBoundingClientRect().width;
+        const w2 = document.getElementById(bullet.id)?.getBoundingClientRect().width;
+
+        // 宽度校验，避免除数为0
+        if (w1 && w2) {
+          const delay = (w2 / (w1 + w2)) * 5 * 1000;
+          setTimeout(() => {
+            bullet.track.disabled = false; // 解除轨道禁用
+          }, delay);
+        } else {
+          bullet.track.disabled = false; // 宽度获取失败时立即解除禁用
+        }
+      }
+    } else {
+      // 如果弹幕不是滚动类型
+      bullet.track.disabled = true;
+
+      // 3秒后解除轨道禁用
       setTimeout(() => {
-        bullet.track.disabled = false;   // 解除禁用
-      }, delay)
+        bullet.track.disabled = false;
+      }, 3000);
     }
-  })
+  });
 }
+
 
 // 动画结束后将组件销毁
 function done(index: number) {
@@ -119,6 +177,27 @@ function stop() {
   }
   // bullets = []
 }
+
+
+// 处理用户输入的弹幕内容
+function handleInput(b: Danmu1) {
+  const types = {
+    '滚动': 'roll',
+    '顶部': 'top',
+    '底部': 'bottom'
+  }
+  const content = b.content
+  const color = b.color
+  const type = types[b.type]
+  console.log(content, color, type)
+  const bullet = new Bullet(content, color)
+  bullet.danmuType.type = type
+  bullet.track = tracks[randInt(5)]   // 使用第n个轨道
+  bullet.isNew = true
+  bullets.push(bullet)
+  run()
+}
+
 </script>
 
 <template>
@@ -128,8 +207,7 @@ function stop() {
       <!--           style="background-color: #ccc;width: 100%;height: 54px;margin-bottom: 2px"></div>-->
       <div
           v-for="(bullet, index) in bullets"
-          class="title"
-          :class="`animate-${bullet.status}`"
+          :class="bullet.getClassList"
           @animationend="done(index)"
           :key="bullet.key"
           :id="bullet.id"
@@ -165,6 +243,9 @@ function stop() {
             color="#ffcc00"
             @click="stop"
         />
+      </div>
+      <div class="btn">
+        <Edit @add="handleInput"/>
       </div>
     </div>
   </div>
@@ -243,5 +324,49 @@ function stop() {
     left: 0;
     transform: translate3d(-100%, 0, 0);
   }
+}
+
+// 非roll类型的动画
+@keyframes fade-out {
+  0% {
+    //display: block;
+
+  }
+  80% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 10%;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.danmu-type-top {
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 40px;
+  transition: all 1s linear;
+}
+
+.fade-out {
+  animation: fade-out 5s linear forwards;
+}
+
+.danmu-type-bottom {
+  text-align: center;
+  font-size: 16px;
+  line-height: 40px;
+  transition: all 1s linear;
+
+}
+
+// 新添加的弹幕的样式
+.new-bullet {
+  border: 1px solid #fff;
+  padding: 0 10px;
 }
 </style>

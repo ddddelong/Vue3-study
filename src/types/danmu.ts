@@ -8,3 +8,11 @@ interface Danmu {
 	motion: number;  // 弹幕的运动轨迹，0为普通弹幕，1为底部弹幕，2为顶部弹幕，3为逆向弹幕。
 	moveable: boolean;  // 弹幕是否可以移动，默认为false。
 }
+
+interface Danmu1 {
+	type: '滚动' | '底部' | '顶部';
+	content: string;
+	color: string;
+}
+
+export type {Danmu, Danmu1};
