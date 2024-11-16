@@ -11,7 +11,6 @@ const colorLs = [
   '#d25656',
   '#f5a623',
   '#f7ca18',
-  '#000000',
   '#2a82c2',
   '#f5a623',
   '#f8f',
@@ -101,7 +100,11 @@ class Bullet {
 
 let bullets = reactive<Bullet[]>([])   // 弹幕数组
 const tracks = reactive<Track[]>([])   // 轨道数组
-const bulletTypes = reactive<DanmuType[]>([])
+const bulletTypes = reactive<DanmuType[]>([
+  new DanmuType('roll'),
+  new DanmuType('top'),
+  new DanmuType('bottom')
+])  // 弹幕类型
 const trackCount = 8   // 轨道数量
 // 初始化轨道
 for (let i = 0; i < trackCount; i++) {
@@ -110,12 +113,7 @@ for (let i = 0; i < trackCount; i++) {
   tracks.push(track)
 }
 
-// 初始化弹幕类型
-bulletTypes.push(new DanmuType('roll'))
-bulletTypes.push(new DanmuType('top'))
-bulletTypes.push(new DanmuType('bottom'))
-
-// 添加弹幕
+// region 添加弹幕
 function add(
     option: {
       color?: string,
@@ -123,7 +121,7 @@ function add(
       n?: number,
       type?: DanmuType,
       isNew?: boolean
-    }
+    } = {}
 ) {
   const {
     color = colorLs[randInt(colorLs.length)],
@@ -131,20 +129,20 @@ function add(
     type = bulletTypes[randInt(bulletTypes.length)],
     isNew = false
   } = option
-  let n: number = randInt(trackCount);   // 使用的轨道
 
-  switch (type.type) {
-    case 'top':
-      const end = Math.floor(Math.random() * trackCount * 0.3)
-      n = randInt(end)
-      break
-    case 'bottom':
-      const start = Math.floor(Math.random() * trackCount * 0.8)
-      n = randInt(start, trackCount)
-      break
-    case 'roll':
-      n = randInt(trackCount)
-  }
+  // 如果提供了 `n`，直接使用；否则根据类型随机分配轨道
+  let n: number = option.n ?? (() => {
+    switch (type.type) {
+      case 'top':
+        const end = Math.floor(trackCount * 0.3)
+        return randInt(end); // 顶部弹幕轨道范围
+      case 'bottom':
+        const start = Math.floor(trackCount * 0.8)
+        return randInt(start, trackCount); // 底部弹幕轨道范围
+      default:
+        return randInt(trackCount); // 滚动弹幕或默认范围
+    }
+  })();
 
   const bullet = new Bullet(content, color)
   bullet.isNew = isNew
@@ -154,6 +152,8 @@ function add(
   // console.log(bullet)
   bullets.push(bullet)
 }
+
+// endregion
 
 function run() {
   bullets.forEach((bullet) => {
@@ -254,7 +254,6 @@ function getBulletStyle(bullet: Bullet) {
           :class="bullet.getClassList"
           @animationend="done(index)"
           :key="bullet.key"
-          :id="bullet.id"
           :style="getBulletStyle(bullet)"
       >
         <p :class="[bullet.isNew ? 'new-bullet': '']">{{ bullet.content }}</p>
@@ -264,7 +263,7 @@ function getBulletStyle(bullet: Bullet) {
       <div class="btn">
         <NavButton
             text="装填弹幕"
-            @click="add({})"
+            @click="add()"
         />
       </div>
       <div class="btn">
