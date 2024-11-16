@@ -9,8 +9,10 @@ interface Danmu {
 	moveable: boolean;  // 弹幕是否可以移动，默认为false。
 }
 
+type DanmuTypes = 'top' | 'bottom' | 'roll'
+
 interface Danmu1 {
-	type: '滚动' | '底部' | '顶部';
+	type: DanmuTypes;
 	content: string;
 	color: string;
 }
