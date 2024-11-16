@@ -116,12 +116,42 @@ bulletTypes.push(new DanmuType('top'))
 bulletTypes.push(new DanmuType('bottom'))
 
 // 添加弹幕
-function add(n: number = randInt(trackCount)) {
-  const color = colorLs[randInt(colorLs.length)]
-  const content = bulletContents[randInt(bulletContents.length)]
+function add(
+    option: {
+      color?: string,
+      content?: string,
+      n?: number,
+      type?: DanmuType,
+      isNew?: boolean
+    }
+) {
+  const {
+    color = colorLs[randInt(colorLs.length)],
+    content = bulletContents[randInt(bulletContents.length)],
+    type = bulletTypes[randInt(bulletTypes.length)],
+    isNew = false
+  } = option
+  let n: number = randInt(trackCount);   // 使用的轨道
+
+  switch (type.type) {
+    case 'top':
+      const end = Math.floor(Math.random() * trackCount * 0.3)
+      n = randInt(end)
+      break
+    case 'bottom':
+      const start = Math.floor(Math.random() * trackCount * 0.8)
+      n = randInt(start, trackCount)
+      break
+    case 'roll':
+      n = randInt(trackCount)
+  }
+
   const bullet = new Bullet(content, color)
+  bullet.isNew = isNew
   bullet.track = tracks[n]   // 使用第n个轨道
-  bullet.danmuType = bulletTypes[randInt(bulletTypes.length)]   // 使用随机弹幕类型
+  bullet.danmuType = type   // 使用随机弹幕类型
+
+  // console.log(bullet)
   bullets.push(bullet)
 }
 
@@ -176,7 +206,7 @@ function auto() {
   timer = setInterval(() => {
     tracks.forEach((track, index) => {
       if (!track.disabled) {
-        add(index)   // 如果轨道未禁用，则添加弹幕
+        add({n: index})   // 如果轨道未禁用，则添加弹幕
         nextTick(() => {
           run()
         })
@@ -198,20 +228,8 @@ function stop() {
 
 // 处理用户输入的弹幕内容
 function handleInput(b: Danmu1) {
-  const types = {
-    '滚动': 'roll',
-    '顶部': 'top',
-    '底部': 'bottom'
-  }
-  const content = b.content
-  const color = b.color
-  const type = types[b.type]
-  console.log(content, color, type)
-  const bullet = new Bullet(content, color)
-  bullet.danmuType.type = type
-  bullet.track = tracks[randInt(5)]   // 使用第n个轨道
-  bullet.isNew = true
-  bullets.push(bullet)
+  const {content, color, type} = b
+  add({content, color, type: new DanmuType(type), isNew: true})
   run()
 }
 
@@ -246,7 +264,7 @@ function getBulletStyle(bullet: Bullet) {
       <div class="btn">
         <NavButton
             text="装填弹幕"
-            @click="add(randInt(trackCount))"
+            @click="add({})"
         />
       </div>
       <div class="btn">
