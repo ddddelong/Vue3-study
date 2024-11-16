@@ -22,7 +22,7 @@
             v-model="form.type"
             label="选择弹幕模式"
             style="width: 240px;">
-          <el-option v-for="t in form.types" :label="t.name" :value="t.name"/>
+          <el-option v-for="t in form.types" :label="t.name" :value="t.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="弹幕颜色" :label-width="formLabelWidth">
@@ -62,17 +62,12 @@ const formLabelWidth = '140px'
 const form = reactive({
   content: '',
   color: '#f5a623',
-  types: [{
-    name: '滚动',
-    value: 'roll'
-  }, {
-    name: '顶部',
-    value: 'top'
-  }, {
-    name: '底部',
-    value: 'bottom'
-  }],
-  type: '滚动',
+  types: [
+    {name: '滚动', value: 'roll'},
+    {name: '顶部', value: 'top'},
+    {name: '底部', value: 'bottom'}
+  ],
+  type: 'roll',
 })
 
 // 编辑弹幕
@@ -88,10 +83,10 @@ function send() {
   }
 
   dialogFormVisible.value = false
-  const bullet = {
+  const bullet: Danmu1 = {
     content: form.content,
     color: form.color,
-    type: form.type,
+    type: form.type as 'top' | 'bottom' | 'roll',
   }
   console.log(bullet)
   form.content = ''   // 清空输入框内容
