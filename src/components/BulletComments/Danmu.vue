@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import NavButton from "@/components/NavButton.vue";
 import Edit from "@/components/BulletComments/Edit.vue";
-import type {Danmu1} from "@/types/danmu";
+import {type Danmu1} from "@/types/danmu";
 import {nextTick, reactive} from "vue";
 import {nanoid} from "nanoid";
 import {randInt} from '@/hooks/random'
@@ -62,7 +62,16 @@ class Bullet {
   }
 
   get getTrackOffset() {
-    return this.track.offset
+    if (this.danmuType.isRoll) {
+      return {
+        top: `${this.track.offset}px`, // 滚动弹幕使用 `top`
+      };
+    }
+
+    return {
+      transform: `translateY(${this.track.offset}px)`, // 非滚动弹幕使用 `transform`
+    };
+
   }
 
   get getColor() {
@@ -77,7 +86,15 @@ class Bullet {
         return [`danmu-type-${this.danmuType.type}`, 'fade-out']
       }
     } else {
-      return [`animate-${this.status}`, 'title', 'new-bullet']
+      switch (this.danmuType.type) {
+        case 'bottom':
+
+        case 'top':
+          return [`danmu-type-${this.danmuType.type}`, 'fade-out']
+
+        case 'roll':
+          return [`animate-${this.status}`, 'title']
+      }
     }
   }
 }
@@ -198,6 +215,15 @@ function handleInput(b: Danmu1) {
   run()
 }
 
+
+function getBulletStyle(bullet: Bullet) {
+  return {
+    ...bullet.getTrackOffset, // 获取 `top` 或 `transform` 样式
+    color: bullet.getColor,   // 弹幕颜色
+    '--duration': '4s',       // 动画持续时间
+  };
+}
+
 </script>
 
 <template>
@@ -211,9 +237,9 @@ function handleInput(b: Danmu1) {
           @animationend="done(index)"
           :key="bullet.key"
           :id="bullet.id"
-          :style="{ top: `${bullet.getTrackOffset}px` , color: bullet.getColor, '--duration': 4 +  's' }"
+          :style="getBulletStyle(bullet)"
       >
-        {{ bullet.content || 666 }}
+        <p :class="[bullet.isNew ? 'new-bullet': '']">{{ bullet.content }}</p>
       </div>
     </div>
     <div class="nav">
@@ -344,9 +370,11 @@ function handleInput(b: Danmu1) {
   }
 }
 
-.danmu-type-top {
-  display: flex;
-  justify-content: center;
+.danmu-type-top,
+.danmu-type-bottom {
+  position: absolute;
+  text-align: center;
+  width: 100%;
   font-size: 16px;
   line-height: 40px;
   transition: all 1s linear;
@@ -356,16 +384,9 @@ function handleInput(b: Danmu1) {
   animation: fade-out 5s linear forwards;
 }
 
-.danmu-type-bottom {
-  text-align: center;
-  font-size: 16px;
-  line-height: 40px;
-  transition: all 1s linear;
-
-}
-
 // 新添加的弹幕的样式
 .new-bullet {
+  display: inline-block;
   border: 1px solid #fff;
   padding: 0 10px;
 }
