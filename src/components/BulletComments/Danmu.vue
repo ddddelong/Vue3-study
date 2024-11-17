@@ -6,7 +6,20 @@ import {nextTick, reactive} from "vue";
 import {nanoid} from "nanoid";
 import {randInt} from '@/hooks/random'
 
+const DURATION = 5   // 弹幕持续时间，单位s
+const INTERVAL = 5000  // 自动发射弹幕的间隔时间，单位ms
+
 const bulletContents = ['666', '对对对', '哈哈哈', '我的天呐', '胡闹', '永恒荣耀，不灭星辰', '破浪乘风，粤上巅峰', '激流勇进，破浪归', '生而无畏，战至终章']
+// const bulletContents = [
+//   '全都是泡沫，只一刹的花火',
+//   '为什么难过',
+//   '阳光下的泡沫，是彩色的',
+//   '美丽的泡沫，虽然一刹花火',
+//   '有什么难过',
+//   '一触就破',
+//   '再美的花朵，盛开过就凋落',
+//   '再亮眼的星，一闪过就坠落'
+// ]
 const colorLs = [
   '#d25656',
   '#f5a623',
@@ -105,7 +118,7 @@ const bulletTypes = reactive<DanmuType[]>([
   new DanmuType('top'),
   new DanmuType('bottom')
 ])  // 弹幕类型
-const trackCount = 8   // 轨道数量
+const trackCount = 12   // 轨道数量
 // 初始化轨道
 for (let i = 0; i < trackCount; i++) {
   const track = new Track()
@@ -171,7 +184,7 @@ function run() {
 
         // 宽度校验，避免除数为0
         if (w1 && w2) {
-          const delay = (w2 / (w1 + w2)) * 5 * 1000;
+          const delay = (w2 / (w1 + w2)) * DURATION * 1.2
           setTimeout(() => {
             bullet.track.disabled = false; // 解除轨道禁用
           }, delay);
@@ -186,11 +199,10 @@ function run() {
       // 3秒后解除轨道禁用
       setTimeout(() => {
         bullet.track.disabled = false;
-      }, 3000);
+      }, 5000);
     }
   });
 }
-
 
 // 动画结束后将组件销毁
 function done(index: number) {
@@ -213,7 +225,7 @@ function auto() {
         return
       }
     })
-  }, 500)
+  }, INTERVAL)
 }
 
 // 停止发射弹幕
@@ -238,7 +250,7 @@ function getBulletStyle(bullet: Bullet) {
   return {
     ...bullet.getTrackOffset, // 获取 `top` 或 `transform` 样式
     color: bullet.getColor,   // 弹幕颜色
-    '--duration': '4s',       // 动画持续时间
+    '--duration': `${DURATION}s`,       // 动画持续时间
   };
 }
 
@@ -398,7 +410,7 @@ function getBulletStyle(bullet: Bullet) {
 }
 
 .fade-out {
-  animation: fade-out 5s linear forwards;
+  animation: fade-out var(--duration) linear forwards;
 }
 
 // 新添加的弹幕的样式
